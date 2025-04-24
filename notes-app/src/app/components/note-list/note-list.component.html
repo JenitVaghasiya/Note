@@ -1,0 +1,63 @@
+<div class="container">
+    <!-- Header with toggle view functionality -->
+    <app-header (toggleView)="toggleView()"></app-header>
+    
+    <!-- Alert for errors -->
+    <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{ error }}
+      <button type="button" class="btn-close" (click)="error = ''"></button>
+    </div>
+    
+    <!-- Create Note Button -->
+    <div class="mb-4">
+      <button class="btn btn-success" (click)="openCreateForm()" *ngIf="!showForm">
+        <i class="bi bi-plus-circle me-1"></i> Create New Note
+      </button>
+    </div>
+    
+    <!-- Note Form -->
+    <app-note-form 
+      *ngIf="showForm" 
+      [noteToEdit]="selectedNote" 
+      (save)="saveNote($event)" 
+      (cancel)="cancelEdit()">
+    </app-note-form>
+    
+    <!-- Loading Spinner -->
+    <div *ngIf="loading" class="d-flex justify-content-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    
+    <!-- No Notes Message -->
+    <div *ngIf="!loading && notes.length === 0" class="alert alert-info">
+      No notes found. Create your first note by clicking the button above!
+    </div>
+    
+    <!-- Card View -->
+    <div *ngIf="!loading && notes.length > 0 && isCardView" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <div class="col" *ngFor="let note of notes">
+        <app-note-card 
+          [note]="note" 
+          (edit)="editNote($event)" 
+          (delete)="deleteNote($event)">
+        </app-note-card>
+      </div>
+    </div>
+    
+    <!-- List View -->
+    <div *ngIf="!loading && notes.length > 0 && !isCardView" class="list-group">
+      <div class="list-group-item list-group-item-action" *ngFor="let note of notes">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{ note.title }}</h5>
+          <small>{{ note.createdAt | date:'short' }}</small>
+        </div>
+        <p class="mb-1">{{ note.description }}</p>
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-sm btn-outline-primary me-2" (click)="editNote(note)">Edit</button>
+          <button class="btn btn-sm btn-outline-danger" (click)="deleteNote(note.id!)">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>

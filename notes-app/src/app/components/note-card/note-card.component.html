@@ -1,0 +1,16 @@
+<div class="card h-100">
+    <div class="card-body">
+      <h5 class="card-title">{{ note.title }}</h5>
+      <p class="card-text">{{ note.description }}</p>
+      <div class="text-muted small mb-2">
+        Created: {{ note.createdAt | date:'short' }}
+        <span *ngIf="note.updatedAt">(Updated: {{ note.updatedAt | date:'short' }})</span>
+      </div>
+    </div>
+    <div class="card-footer bg-transparent">
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-sm btn-outline-primary me-2" (click)="onEdit()">Edit</button>
+        <button class="btn btn-sm btn-outline-danger" (click)="onDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
